@@ -86,33 +86,48 @@ class DashboardState extends State<Dashboard> {
                                             );
                                           });
                                         },
-                                        child: Card(
-                                          elevation: 5,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            child: Column(
-                                              children: [
-                                                Image.network(
-                                                  yourdata[index].image,
-                                                  width: 100,
+                                        child: Stack(
+                                          children: [
+                                            Card(
+                                              elevation: 5,
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  children: [
+                                                    Image.network(
+                                                      yourdata[index].image,
+                                                      width: 100,
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        yourdata[index].title,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                                Expanded(
-                                                  child: Text(
-                                                    yourdata[index].title,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                )
-                                              ],
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                              ),
                                             ),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                          ),
+                                            Positioned(
+                                                top: -4,
+                                                left: -5,
+                                                child: Image.asset(
+                                                  "assets/images/new.png",
+                                                  width: 45,
+                                                  height: 50,
+                                                ))
+                                          ],
                                         ),
                                       );
                                     })

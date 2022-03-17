@@ -3,6 +3,7 @@ import 'package:bookstore/model/bookdetail_model.dart';
 import 'package:bookstore/ui/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 
@@ -44,16 +45,17 @@ class BookDetailState extends State<BookDetail> {
                               datas.title,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   color: Colors.black87),
                             ),
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            alignment: Alignment.centerRight,
+                            width: MediaQuery.of(context).size.width * 0.35,
                             child: RatingBar.builder(
                               initialRating: double.parse(datas.rating),
                               minRating: 1,
-                              itemSize: 25,
+                              itemSize: 22,
                               direction: Axis.horizontal,
                               allowHalfRating: true,
                               itemCount: 5,
@@ -78,7 +80,7 @@ class BookDetailState extends State<BookDetail> {
                               datas.subtitle,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                  fontSize: 14,
                                   color: Colors.grey),
                             ),
                           ),
@@ -127,24 +129,28 @@ class BookDetailState extends State<BookDetail> {
                           ),
                           Row(
                             children: [
-                              ElevatedButton.icon(
-                                icon: LikeButton(),
-                                label: Text(
-                                  "Add to wishlist ",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black54),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.grey[200],
-                                  onPrimary: Colors.white,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(6))),
-                                ),
-                                onPressed: () {
-                                  print('Pressed');
-                                },
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(50)),
+                                padding: EdgeInsets.all(5),
+                                child: LikeButton(likeBuilder: (isLiked) {
+                                  if (isLiked == true)
+                                    Fluttertoast.showToast(
+                                        msg: "This is Center Short Toast",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.pink,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                }),
+                              ),
+                              Text(
+                                "Add to wishlist ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black54),
                               ),
                             ],
                           )
