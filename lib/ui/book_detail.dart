@@ -1,7 +1,10 @@
 import 'package:bookstore/bloc/bookdetail_bloc.dart';
 import 'package:bookstore/model/bookdetail_model.dart';
+import 'package:bookstore/ui/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:like_button/like_button.dart';
 
 class BookDetail extends StatefulWidget {
   const BookDetail({Key? key}) : super(key: key);
@@ -28,6 +31,7 @@ class BookDetailState extends State<BookDetail> {
           return snapshot.connectionState != ConnectionState.waiting
               ? Container(
                   margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(5),
                   alignment: Alignment.topLeft,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
@@ -47,7 +51,7 @@ class BookDetailState extends State<BookDetail> {
                           Container(
                             width: MediaQuery.of(context).size.width * 0.4,
                             child: RatingBar.builder(
-                              initialRating: 3,
+                              initialRating: double.parse(datas.rating),
                               minRating: 1,
                               itemSize: 25,
                               direction: Axis.horizontal,
@@ -103,18 +107,46 @@ class BookDetailState extends State<BookDetail> {
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Price: ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15,
-                                color: Colors.orangeAccent[400]),
+                          Row(
+                            children: [
+                              Text(
+                                "Price: ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Colors.orangeAccent[400]),
+                              ),
+                              Text(
+                                datas.price,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 25),
+                              )
+                            ],
                           ),
-                          Text(
-                            datas.price,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 25),
+                          Row(
+                            children: [
+                              ElevatedButton.icon(
+                                icon: LikeButton(),
+                                label: Text(
+                                  "Add to wishlist ",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black54),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey[200],
+                                  onPrimary: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(6))),
+                                ),
+                                onPressed: () {
+                                  print('Pressed');
+                                },
+                              ),
+                            ],
                           )
                         ],
                       ),
@@ -161,8 +193,8 @@ class BookDetailState extends State<BookDetail> {
                               height: 5,
                             ),
                             Text(
-                              datas.desc,
-                              style: TextStyle(color: Colors.black87),
+                              "       " + datas.desc,
+                              style: GoogleFonts.lato(),
                             )
                           ],
                         ),
@@ -320,37 +352,54 @@ class BookDetailState extends State<BookDetail> {
               children: [
                 Container(
                   padding: EdgeInsets.all(5),
-                  width: MediaQuery.of(context).size.width * 0.43,
+                  width: MediaQuery.of(context).size.width * 0.45,
                   child: ElevatedButton(
                     child: Text(
                       "More Info",
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey[200],
+                      primary: Colors.orangeAccent[400],
                       onPrimary: Colors.white,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(6))),
                     ),
                     onPressed: () {
-                      print('Pressed');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WebViewContainer(
+                                WebViewContainerArguments(
+                                    datas.url, datas.title))),
+                      );
                     },
                   ),
                 ),
-                ElevatedButton(
-                  child: Text(
-                    "Add to wishlist",
-                    style: TextStyle(color: Colors.grey),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.currency_pound),
+                    label: Text(
+                      "Buy now",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.pink,
+                      onPrimary: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WebViewContainer(
+                                WebViewContainerArguments(
+                                    "https://www.amazon.com/dp/${datas.isbn10}/?tag=isbndir-20",
+                                    datas.title))),
+                      );
+                    },
                   ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.pink,
-                    onPrimary: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(6))),
-                  ),
-                  onPressed: () {
-                    print('Pressed');
-                  },
                 )
               ],
             ),

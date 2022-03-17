@@ -1,4 +1,5 @@
 import 'package:bookstore/ui/dashbaord.dart';
+import 'package:bookstore/ui/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const Dashboard(),
+      home: const LoginScreen(),
     );
   }
 }
