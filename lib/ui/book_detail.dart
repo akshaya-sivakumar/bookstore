@@ -34,7 +34,7 @@ class BookDetailState extends State<BookDetail> {
         builder: (context, snapshot) {
           if (snapshot.hasData) datas = snapshot.data;
           return snapshot.connectionState != ConnectionState.waiting
-              ?  onGridBooks(context)
+              ? onGridBooks(context)
               : Container(
                   height: MediaQuery.of(context).size.height,
                   alignment: FractionalOffset.center,
@@ -45,238 +45,254 @@ class BookDetailState extends State<BookDetail> {
         });
   }
 
- Widget onGridBooks(BuildContext context)  {
+  Widget onGridBooks(BuildContext context) {
     return Container(
-                margin: const EdgeInsets.all(5),
-                padding: const EdgeInsets.all(5),
-                alignment: Alignment.topLeft,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
+        alignment: Alignment.topLeft,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Text(
+                    datas?.title ?? "",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        color: Colors.black87),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  child: RatingBar.builder(
+                    initialRating: double.parse(datas?.rating ?? "0"),
+                    minRating: 1,
+                    itemSize: 22,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      size: 10,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {},
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    datas?.subtitle ?? "",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+            Stack(
+              clipBehavior: Clip.hardEdge,
+              children: [
+                if (datas!.image != null)
+                  Image.network(
+                    datas!.image,
+                    width: 350,
+                    height: 350,
+                    errorBuilder: (context, error, stackTrace) {
+                      return ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(0)),
+                        child: Image.network(
+                          "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id922962354?k=20&m=922962354&s=170667a&w=0&h=mRTFds0L_Hq63ohdqIdHXMrE32DqOnajt4I0yJ1bBtU=",
+                          height: 100,
+                          width: 150,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container();
+                          },
+                        ),
+                      );
+                    },
+                  )
+                else
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(0)),
+                    child: Image.network(
+                      "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id922962354?k=20&m=922962354&s=170667a&w=0&h=mRTFds0L_Hq63ohdqIdHXMrE32DqOnajt4I0yJ1bBtU=",
+                      height: 100,
+                      width: 150,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container();
+                      },
+                    ),
+                  ),
+                Positioned(
+                  top: 12,
+                  left: 28,
+                  child: Image.asset(
+                    "assets/images/stock.png",
+                    color: Colors.green,
+                    colorBlendMode: BlendMode.dst,
+                  ),
+                  width: 120,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            datas?.title ?? "",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: Colors.black87),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          width: MediaQuery.of(context).size.width * 0.35,
-                          child: RatingBar.builder(
-                            initialRating: double.parse(datas?.rating ?? "0"),
-                            minRating: 1,
-                            itemSize: 22,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 0.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              size: 10,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {},
-                          ),
-                        )
-                      ],
+                    Text(
+                      "Price :  ",
+                      style: GoogleFonts.lato(
+                          fontSize: 15, color: Colors.orangeAccent[400]),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            datas?.subtitle ?? "",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Stack(
-                      clipBehavior: Clip.hardEdge,
-                      children: [
-                        if (datas != null)
-                          Image.network(
-                            datas!.image,
-                            width: 350,
-                            height: 350,
-                          ),
-                        Positioned(
-                          top: 12,
-                          left: 28,
-                          child: Image.asset(
-                            "assets/images/stock.png",
-                            color: Colors.green,
-                            colorBlendMode: BlendMode.dst,
-                          ),
-                          width: 120,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Price :  ",
-                              style: GoogleFonts.lato(
-                                  fontSize: 15,
-                                  color: Colors.orangeAccent[400]),
-                            ),
-                            Text(
-                              datas?.price ?? "",
-                              style: GoogleFonts.lato(
-                                  fontWeight: FontWeight.bold, fontSize: 23),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(50)),
-                              padding: const EdgeInsets.all(5),
-                              child: LikeButton(likeBuilder: (isLiked) {
-                                if (isLiked == true) {
-                                  Fluttertoast.showToast(
-                                      msg: "Added to wishlist",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.pink,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                }
-                                return null;
-                              }),
-                            ),
-                            const Text(
-                              "Add to wishlist ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "M.R.P  : ",
-                          style: GoogleFonts.lato(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                              color: Colors.grey),
-                        ),
-                        const Text(
-                          "20.97",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.grey,
-                              decoration: TextDecoration.lineThrough),
-                        )
-                      ],
-                    ),
-                    rowButtons(
-                        context,
-                        "Length  ",
-                        (datas?.pages ?? "") + " Pages",
-                        "Language ",
-                        datas?.language),
-                    columnButtons(
-                      context,
-                      "Author         ",
-                      datas?.authors ?? "",
-                      "Publisher   ",
-                      datas?.publisher ?? "",
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Description ",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "       " + (datas?.desc ?? ""),
-                            style: GoogleFonts.lato(),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Published At : ",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            datas?.year ?? "",
-                            style: GoogleFonts.lato(),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2.0),
-                            child: Text(
-                              "Download PDF : ",
-                              style: GoogleFonts.lato(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              await launch(
-                                  "https://itbook.store/books/${datas?.isbn13}");
-                            },
-                            child: Text(
-                              "Click here",
-                              style: GoogleFonts.lato(
-                                  color: HexColor("#F54D3D"), fontSize: 17),
-                            ),
-                          )
-                        ],
-                      ),
+                    Text(
+                      datas?.price ?? "",
+                      style: GoogleFonts.lato(
+                          fontWeight: FontWeight.bold, fontSize: 23),
                     )
                   ],
-                ));
+                ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(50)),
+                      padding: const EdgeInsets.all(5),
+                      child: LikeButton(likeBuilder: (isLiked) {
+                        if (isLiked == true) {
+                          Fluttertoast.showToast(
+                              msg: "Added to wishlist",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.pink,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+                        return null;
+                      }),
+                    ),
+                    const Text(
+                      "Add to wishlist ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black54),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "M.R.P  : ",
+                  style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: Colors.grey),
+                ),
+                const Text(
+                  "20.97",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough),
+                )
+              ],
+            ),
+            rowButtons(context, "Length  ", (datas?.pages ?? "") + " Pages",
+                "Language ", datas?.language),
+            columnButtons(
+              context,
+              "Author         ",
+              datas?.authors ?? "",
+              "Publisher   ",
+              datas?.publisher ?? "",
+            ),
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Description ",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "       " + (datas?.desc ?? ""),
+                    style: GoogleFonts.lato(),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Published At : ",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    datas?.year ?? "",
+                    style: GoogleFonts.lato(),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2.0),
+                    child: Text(
+                      "Download PDF : ",
+                      style: GoogleFonts.lato(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      await launch(
+                          "https://itbook.store/books/${datas?.isbn13}");
+                    },
+                    child: Text(
+                      "Click here",
+                      style: GoogleFonts.lato(
+                          color: HexColor("#F54D3D"), fontSize: 17),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ));
   }
 
   Row rowButtons(
