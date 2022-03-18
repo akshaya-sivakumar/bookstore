@@ -91,11 +91,39 @@ class BookDetailState extends State<BookDetail> {
                       Stack(
                         overflow: Overflow.clip,
                         children: [
-                          Image.network(
-                            datas.image,
-                            width: 350,
-                            height: 350,
-                          ),
+                          if (datas.image != null)
+                            Image.network(
+                              datas.image,
+                              width: 350,
+                              height: 350,
+                              errorBuilder: (context, error, stackTrace) {
+                                return ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(0)),
+                                  child: Image.network(
+                                    "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id922962354?k=20&m=922962354&s=170667a&w=0&h=mRTFds0L_Hq63ohdqIdHXMrE32DqOnajt4I0yJ1bBtU=",
+                                    height: 100,
+                                    width: 150,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container();
+                                    },
+                                  ),
+                                );
+                              },
+                            )
+                          else
+                            ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(0)),
+                              child: Image.network(
+                                "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id922962354?k=20&m=922962354&s=170667a&w=0&h=mRTFds0L_Hq63ohdqIdHXMrE32DqOnajt4I0yJ1bBtU=",
+                                height: 100,
+                                width: 150,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container();
+                                },
+                              ),
+                            ),
                           Positioned(
                             top: 12,
                             left: 28,

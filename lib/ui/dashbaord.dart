@@ -106,10 +106,51 @@ class DashboardState extends State<Dashboard> {
                                                 alignment: Alignment.center,
                                                 child: Column(
                                                   children: [
-                                                    Image.network(
-                                                      yourdata[index].image,
-                                                      width: 100,
-                                                    ),
+                                                    if (yourdata[index].image !=
+                                                        null)
+                                                      Image.network(
+                                                        yourdata[index].image,
+                                                        width: 100,
+                                                        errorBuilder: (context,
+                                                            error, stackTrace) {
+                                                          return ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            0)),
+                                                            child:
+                                                                Image.network(
+                                                              "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id922962354?k=20&m=922962354&s=170667a&w=0&h=mRTFds0L_Hq63ohdqIdHXMrE32DqOnajt4I0yJ1bBtU=",
+                                                              height: 100,
+                                                              width: 150,
+                                                              errorBuilder:
+                                                                  (context,
+                                                                      error,
+                                                                      stackTrace) {
+                                                                return Container();
+                                                              },
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    else
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    0)),
+                                                        child: Image.network(
+                                                          "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id922962354?k=20&m=922962354&s=170667a&w=0&h=mRTFds0L_Hq63ohdqIdHXMrE32DqOnajt4I0yJ1bBtU=",
+                                                          height: 100,
+                                                          width: 150,
+                                                          errorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return Container();
+                                                          },
+                                                        ),
+                                                      ),
                                                     Expanded(
                                                       child: Padding(
                                                         padding:
