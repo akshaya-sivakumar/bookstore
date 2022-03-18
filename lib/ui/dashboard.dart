@@ -109,6 +109,7 @@ class DashboardState extends State<Dashboard> {
                                                 alignment: Alignment.center,
                                                 child: Column(
                                                   children: [
+                                                    // ignore: unnecessary_null_comparison
                                                     if (yourdata[index].image !=
                                                         null)
                                                       Image.network(
@@ -118,8 +119,9 @@ class DashboardState extends State<Dashboard> {
                                                             error, stackTrace) {
                                                           return ClipRRect(
                                                             borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
+                                                                const BorderRadius
+                                                                        .all(
+                                                                    Radius
                                                                         .circular(
                                                                             0)),
                                                             child:
@@ -140,7 +142,8 @@ class DashboardState extends State<Dashboard> {
                                                     else
                                                       ClipRRect(
                                                         borderRadius:
-                                                            BorderRadius.all(
+                                                            const BorderRadius
+                                                                    .all(
                                                                 Radius.circular(
                                                                     0)),
                                                         child: Image.network(

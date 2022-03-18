@@ -170,6 +170,10 @@ class SplashScreenState extends State<SplashScreen> {
       isScrollable: false,
       hideStatusBar: true,
       onDonePress: onDonePress,
+      showNextBtn: true,
+      nextButtonStyle: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(HexColor("#F67B50")),
+      ),
     );
   }
 }
