@@ -1,5 +1,8 @@
 import 'package:bookstore/ui/dashbaord.dart';
+import 'package:bookstore/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class SliderView extends StatelessWidget {
   final Function(String)? onItemClick;
@@ -10,75 +13,116 @@ class SliderView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-        child: Row(
+        height: 200,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft,
+              colors: <Color>[HexColor("#F67B50"), HexColor("#FBAA60")]),
+        ),
+        padding: const EdgeInsets.only(top: 10, right: 10, left: 7, bottom: 5),
+        child: Column(
           children: [
-            Column(
-              children: [
-                Container(
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.grey,
-                    child: CircleAvatar(
-                      radius: 45,
-                      backgroundImage: AssetImage('assets/images/profile.png'),
+            Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.white70, width: 2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Container(
+                height: 50,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: HexColor("#fdcfb0"),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
+                    Container(
+                      child: CircleAvatar(
+                        radius: 25,
+                        backgroundImage:
+                            AssetImage('assets/images/profile.png'),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "Hi, " + SplashScreenState.nameText.text,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          fontFamily: 'BalsamiqSans'),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Nick',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      fontFamily: 'BalsamiqSans'),
-                ),
-                SizedBox(
-                  height: 10,
-                )
-              ],
+              ),
             ),
-            Expanded(
-              child: GridView(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 3 / 2,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 0),
+            Container(
+              margin: const EdgeInsets.only(left: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _SliderMenuItem(
-                      title: 'Home',
-                      iconData: Icons.home,
-                      onTap: (data) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Dashboard()),
-                        );
-                      }),
-                  _SliderMenuItem(
-                      title: 'Notification',
-                      iconData: Icons.notifications_active,
-                      onTap: onItemClick),
-                  _SliderMenuItem(
-                      title: 'Wishlist',
-                      iconData: Icons.favorite,
-                      onTap: onItemClick),
-                  _SliderMenuItem(
-                      title: 'Setting',
-                      iconData: Icons.settings,
-                      onTap: onItemClick),
-                  _SliderMenuItem(
-                      title: 'LogOut',
-                      iconData: Icons.arrow_back_ios,
-                      onTap: onItemClick),
+                  Expanded(
+                    child: GridView.count(
+                      mainAxisSpacing: 3,
+                      crossAxisSpacing: 3,
+                      childAspectRatio: 3.5,
+                      crossAxisCount: 2,
+                      padding: EdgeInsets.only(top: 0),
+                      shrinkWrap: true,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: _SliderMenuItem(
+                              title: 'Home',
+                              iconData: Icons.home,
+                              onTap: (data) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Dashboard()),
+                                );
+                              }),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: _SliderMenuItem(
+                              title: 'Notification',
+                              iconData: Icons.notifications_active,
+                              onTap: onItemClick),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: _SliderMenuItem(
+                              title: 'Wishlist',
+                              iconData: Icons.favorite,
+                              onTap: onItemClick),
+                        ),
+                        /*     _SliderMenuItem(
+                            title: 'Setting',
+                            iconData: Icons.settings,
+                            onTap: onItemClick), */
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: _SliderMenuItem(
+                              title: 'LogOut',
+                              iconData: Icons.arrow_back_ios,
+                              onTap: (value) {
+                                SystemNavigator.pop();
+                              }),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
+            ),
           ],
         ),
         /*    child: Column(
@@ -151,12 +195,20 @@ class _SliderMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return InkWell(
+      onTap: () => onTap?.call(title),
+      child: ListTile(
+        minLeadingWidth: 5,
+        minVerticalPadding: 0,
+        contentPadding: EdgeInsets.only(left: 7),
+        leading: Icon(iconData, color: Colors.black),
         title: Text(title,
             style: TextStyle(
-                color: Colors.black, fontFamily: 'BalsamiqSans_Regular')),
-        leading: Icon(iconData, color: Colors.black),
-        onTap: () => onTap?.call(title));
+                fontSize: 15,
+                color: Colors.black,
+                fontFamily: 'BalsamiqSans_Regular')),
+      ),
+    );
   }
 }
 
@@ -176,35 +228,41 @@ class _AuthorList extends StatelessWidget {
         'Never ask an elf for help; they might decide your better off dead, eh?'));
     dataList.add(Data(Colors.green, 'Maya Thomas', 'Act first, explain later'));
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: ListView.separated(
-          scrollDirection: Axis.vertical,
+      padding: const EdgeInsets.symmetric(horizontal: 0),
+      child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 1 / 2,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2),
+          scrollDirection: Axis.horizontal,
           //   physics: BouncingScrollPhysics(),
           //    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           itemBuilder: (builder, index) {
             return Container(
-              height: 100,
+              height: 20,
+              width: 70,
               decoration: new BoxDecoration(
                   color: dataList[index].color,
                   borderRadius: new BorderRadius.all(
                     const Radius.circular(10.0),
                   )),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(0),
                     child: Text(
                       dataList[index].name,
                       style: TextStyle(
                           fontFamily: 'BalsamiqSans_Blod',
-                          fontSize: 30,
+                          fontSize: 25,
                           color: Colors.white),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(0),
                     child: Text(
                       dataList[index].detail,
                       style: TextStyle(
@@ -215,12 +273,6 @@ class _AuthorList extends StatelessWidget {
                   )
                 ],
               ),
-            );
-          },
-          separatorBuilder: (builder, index) {
-            return Divider(
-              height: 4,
-              thickness: 0,
             );
           },
           itemCount: dataList.length),

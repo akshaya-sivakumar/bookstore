@@ -261,6 +261,7 @@ class BookDetailState extends State<BookDetail> {
                     ],
                   ))
               : Container(
+                  height: MediaQuery.of(context).size.height,
                   alignment: FractionalOffset.center,
                   child: const CircularProgressIndicator(
                       backgroundColor: Colors.black87,
@@ -393,8 +394,7 @@ class BookDetailState extends State<BookDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          actions: [Icon(Icons.notification_add)],
+          automaticallyImplyLeading: true,
           title: Text("BookStore"),
           flexibleSpace: Container(
             decoration: BoxDecoration(

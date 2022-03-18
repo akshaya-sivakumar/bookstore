@@ -376,7 +376,9 @@ class SplashScreen extends StatefulWidget {
 // ------------------ Default config ------------------
 class SplashScreenState extends State<SplashScreen> {
   List<Slide> slides = [];
-
+  final _form = GlobalKey<FormState>();
+  bool _validate = false;
+  static TextEditingController nameText = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -384,7 +386,10 @@ class SplashScreenState extends State<SplashScreen> {
     slides.add(
       new Slide(
           // title: "BOOKSTORE",
-          widgetTitle: Image.asset("assets/images/logo.png"),
+          widgetTitle: Image.asset(
+            "assets/images/logo.png",
+            width: 150,
+          ),
           styleTitle: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -401,7 +406,10 @@ class SplashScreenState extends State<SplashScreen> {
     slides.add(
       new Slide(
           // title: "BOOKSTORE",
-          widgetTitle: Image.asset("assets/images/logo.png"),
+          widgetTitle: Image.asset(
+            "assets/images/logo.png",
+            width: 150,
+          ),
           styleTitle: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -418,25 +426,82 @@ class SplashScreenState extends State<SplashScreen> {
     slides.add(
       new Slide(
           //title: "BOOKSTORE",
-          widgetTitle: Image.asset("assets/images/logo.png"),
+          widgetTitle: Image.asset(
+            "assets/images/logo.png",
+            width: 120,
+          ),
           styleTitle: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: HexColor("#F67B50")),
-          description: "Get your Book",
+          //description: "Get your Book",
+          widgetDescription: Column(
+            children: [
+              Text(
+                "Let's get started..",
+                style: TextStyle(
+                    color: HexColor("#F67B50"),
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Container(
+                margin: EdgeInsets.all(5),
+                //  height: 50,
+                //width: MediaQuery.of(context).size.width * 0.9,
+                child: Form(
+                  key: _form,
+                  child: TextFormField(
+                    controller: nameText,
+                    decoration: InputDecoration(
+                        errorStyle: TextStyle(color: Colors.red),
+                        errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                        filled: true,
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: HexColor("#F54D3D"), width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: HexColor("#F54D3D"), width: 2.0),
+                        ),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: HexColor("#F54D3D"), width: 2.0),
+                            borderRadius: BorderRadius.circular(10)),
+                        hintText: 'Enter your name....',
+                        suffixIcon: Icon(Icons.person),
+                        contentPadding: EdgeInsets.only(left: 10)),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (nameText.text == "") return "Please enter your name";
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
           styleDescription:
               TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           pathImage: "assets/images/screen3.png",
           backgroundColor: Colors.white,
           backgroundImageFit: BoxFit.fitHeight,
-          widthImage: 350,
-          heightImage: 380),
+          widthImage: 320,
+          heightImage: 320),
     );
   }
 
   void onDonePress() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Dashboard()));
+    if (_form.currentState?.validate() ?? false) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
+    }
   }
 
   @override
@@ -452,6 +517,8 @@ class SplashScreenState extends State<SplashScreen> {
       doneButtonStyle: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(HexColor("#F67B50")),
       ),
+      isScrollable: false,
+      hideStatusBar: true,
       onDonePress: this.onDonePress,
     );
   }

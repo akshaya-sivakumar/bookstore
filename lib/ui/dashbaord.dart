@@ -307,19 +307,20 @@ class DashboardState extends State<Dashboard> {
       // backgroundColor: Theme.of(context).primaryColor,
       body: SliderDrawer(
           appBar: SliderAppBar(
-              appBarColor: Colors.white,
+              appBarPadding: EdgeInsets.only(top: 15),
               title: Text("BookStore",
                   style: const TextStyle(
                       fontSize: 22, fontWeight: FontWeight.w700))),
           key: _key,
-          sliderOpenSize: 170,
+          sliderOpenSize: 200,
           slideDirection: SlideDirection.TOP_TO_BOTTOM,
           slider: SliderView(
             onItemClick: (title) {
               _key.currentState!.closeSlider();
             },
           ),
-          child: _buildContent(context)),
+          child:
+              Container(color: Colors.white70, child: _buildContent(context))),
     );
   }
 }

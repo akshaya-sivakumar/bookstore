@@ -1,5 +1,4 @@
-import 'package:bookstore/ui/dashbaord.dart';
-import 'package:bookstore/ui/login.dart';
+
 import 'package:bookstore/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 
