@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:like_button/like_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookDetail extends StatefulWidget {
   const BookDetail({Key? key}) : super(key: key);
@@ -114,16 +116,15 @@ class BookDetailState extends State<BookDetail> {
                           Row(
                             children: [
                               Text(
-                                "Price: ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
+                                "Price :  ",
+                                style: GoogleFonts.lato(
                                     fontSize: 15,
                                     color: Colors.orangeAccent[400]),
                               ),
                               Text(
                                 datas.price,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 25),
+                                style: GoogleFonts.lato(
+                                    fontWeight: FontWeight.bold, fontSize: 23),
                               )
                             ],
                           ),
@@ -137,9 +138,9 @@ class BookDetailState extends State<BookDetail> {
                                 child: LikeButton(likeBuilder: (isLiked) {
                                   if (isLiked == true)
                                     Fluttertoast.showToast(
-                                        msg: "This is Center Short Toast",
+                                        msg: "Added to wishlist",
                                         toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
+                                        gravity: ToastGravity.BOTTOM,
                                         timeInSecForIosWeb: 1,
                                         backgroundColor: Colors.pink,
                                         textColor: Colors.white,
@@ -159,10 +160,10 @@ class BookDetailState extends State<BookDetail> {
                       Row(
                         children: [
                           Text(
-                            "M.R.P  :",
-                            style: TextStyle(
+                            "M.R.P  : ",
+                            style: GoogleFonts.lato(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                                fontSize: 13,
                                 color: Colors.grey),
                           ),
                           Text(
@@ -175,13 +176,13 @@ class BookDetailState extends State<BookDetail> {
                           )
                         ],
                       ),
-                      rowButtons(context, "Length  ", "220 Pages", "Language ",
-                          "English"),
+                      rowButtons(context, "Length  ", datas.pages + " Pages",
+                          "Language ", datas.language),
                       ColumnButtons(
                         context,
-                        "Author  ",
+                        "Author         ",
                         datas.authors,
-                        "Publisher ",
+                        "Publisher   ",
                         datas.publisher,
                       ),
                       Container(
@@ -201,6 +202,58 @@ class BookDetailState extends State<BookDetail> {
                             Text(
                               "       " + datas.desc,
                               style: GoogleFonts.lato(),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Published At : ",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              datas.year,
+                              style: GoogleFonts.lato(),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Text(
+                                "Download PDF : ",
+                                style: GoogleFonts.lato(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                await launch(
+                                    "https://itbook.store/books/${datas.isbn13}");
+                              },
+                              child: Text(
+                                "Click here",
+                                style: GoogleFonts.lato(
+                                    color: HexColor("#F54D3D"), fontSize: 17),
+                              ),
                             )
                           ],
                         ),
@@ -277,70 +330,62 @@ class BookDetailState extends State<BookDetail> {
     );
   }
 
-  Row ColumnButtons(
+  Widget ColumnButtons(
       BuildContext context, String title1, subtitle1, title2, subtitle2) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          padding: EdgeInsets.all(5),
-          width: MediaQuery.of(context).size.width * 0.43,
-          child: ElevatedButton(
-            child: Column(
-              children: [
-                Text(
-                  title1,
-                  style: TextStyle(color: Colors.grey),
-                ),
-                SizedBox(
-                  height: 3,
-                ),
-                Text(
-                  subtitle1,
-                  style: TextStyle(
-                      color: Colors.black87, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: Colors.grey[200],
-              onPrimary: Colors.white,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6))),
-            ),
-            onPressed: () {
-              print('Pressed');
-            },
-          ),
+    return Container(
+      margin: EdgeInsets.all(5),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: HexColor("#FBAA60"), width: 1),
+          borderRadius: BorderRadius.circular(10),
         ),
-        ElevatedButton(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: HexColor("#FFE5B4"),
+          ),
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.all(10),
           child: Column(
             children: [
-              Text(
-                title2,
-                style: TextStyle(color: Colors.grey),
+              Row(
+                children: [
+                  Text(
+                    title1,
+                    style: GoogleFonts.lato(color: HexColor("#A82810")),
+                  ),
+                  Expanded(
+                    child: Text(
+                      subtitle1,
+                      style: GoogleFonts.lato(
+                          color: Colors.black87, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
-                height: 3,
+                height: 5,
               ),
-              Text(
-                subtitle2,
-                style: TextStyle(
-                    color: Colors.black87, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    title2,
+                    style: TextStyle(color: HexColor("#A82810")),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    subtitle2,
+                    style: TextStyle(
+                        color: Colors.black87, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ],
           ),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.grey[200],
-            onPrimary: Colors.white,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(6))),
-          ),
-          onPressed: () {
-            print('Pressed');
-          },
-        )
-      ],
+        ),
+      ),
     );
   }
 
@@ -348,7 +393,17 @@ class BookDetailState extends State<BookDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(""),
+          automaticallyImplyLeading: false,
+          actions: [Icon(Icons.notification_add)],
+          title: Text("BookStore"),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                  colors: <Color>[HexColor("#F67B50"), HexColor("#FBAA60")]),
+            ),
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Container(
@@ -359,8 +414,9 @@ class BookDetailState extends State<BookDetail> {
                 Container(
                   padding: EdgeInsets.all(5),
                   width: MediaQuery.of(context).size.width * 0.45,
-                  child: ElevatedButton(
-                    child: Text(
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.arrow_downward),
+                    label: Text(
                       "More Info",
                       style: TextStyle(color: Colors.white),
                     ),
@@ -384,7 +440,7 @@ class BookDetailState extends State<BookDetail> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: ElevatedButton.icon(
-                    icon: Icon(Icons.currency_pound),
+                    icon: Icon(Icons.shopping_cart),
                     label: Text(
                       "Buy now",
                       style: TextStyle(color: Colors.white),

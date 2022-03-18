@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewContainerArguments {
@@ -45,6 +46,14 @@ class _WebViewContainerState extends State<WebViewContainer> {
           onPressed: () {
             Navigator.pop(context);
           },
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: <Color>[HexColor("#F67B50"), HexColor("#FBAA60")]),
+          ),
         ),
         backgroundColor: Colors.white,
         title: Column(

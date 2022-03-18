@@ -2,8 +2,11 @@ import 'package:bookstore/bloc/booklist_bloc.dart';
 import 'package:bookstore/bloc/yourbooks_bloc.dart';
 import 'package:bookstore/model/booklist_model.dart';
 import 'package:bookstore/ui/book_detail.dart';
+import 'package:bookstore/ui/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -41,7 +44,8 @@ class DashboardState extends State<Dashboard> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(5),
+                          padding: EdgeInsets.only(
+                              left: 12, right: 5, top: 5, bottom: 5),
                           child: Text(
                             "Books for you...",
                             textAlign: TextAlign.start,
@@ -56,6 +60,7 @@ class DashboardState extends State<Dashboard> {
                       ],
                     ),
                     Container(
+                      margin: EdgeInsets.all(5),
                       height: 170,
                       child: StreamBuilder<BooklistModel>(
                           stream: yourbooksBloc.yourbooksStream,
@@ -89,6 +94,13 @@ class DashboardState extends State<Dashboard> {
                                         child: Stack(
                                           children: [
                                             Card(
+                                              shape: RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                    color: HexColor("#F67B50"),
+                                                    width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
                                               elevation: 5,
                                               child: Container(
                                                 alignment: Alignment.center,
@@ -99,15 +111,20 @@ class DashboardState extends State<Dashboard> {
                                                       width: 100,
                                                     ),
                                                     Expanded(
-                                                      child: Text(
-                                                        yourdata[index].title,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4.0),
+                                                        child: Text(
+                                                          yourdata[index].title,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontSize: 11,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ),
                                                     )
                                                   ],
@@ -141,25 +158,28 @@ class DashboardState extends State<Dashboard> {
                                   );
                           }),
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       margin: EdgeInsets.all(5),
-                      height: 40,
+                      height: 45,
                       //width: MediaQuery.of(context).size.width * 0.9,
                       child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(
+                                  color: HexColor("#FBAA60"), width: 2.0),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(
+                                  color: HexColor("#FBAA60"), width: 2.0),
                             ),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                                borderRadius: BorderRadius.circular(25)),
                             hintText: 'Search....',
                             suffixIcon: DashboardState.type != "new"
                                 ? IconButton(
@@ -267,15 +287,39 @@ class DashboardState extends State<Dashboard> {
         });
   }
 
+  GlobalKey<SliderDrawerState> _key = GlobalKey<SliderDrawerState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      /*  appBar: AppBar(
           automaticallyImplyLeading: false,
           actions: [Icon(Icons.notification_add)],
           title: Text("BookStore"),
-        ),
-        // backgroundColor: Theme.of(context).primaryColor,
-        body: _buildContent(context));
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                  colors: <Color>[HexColor("#F67B50"), HexColor("#FBAA60")]),
+            ),
+          ),
+        ), */
+      // backgroundColor: Theme.of(context).primaryColor,
+      body: SliderDrawer(
+          appBar: SliderAppBar(
+              appBarColor: Colors.white,
+              title: Text("BookStore",
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.w700))),
+          key: _key,
+          sliderOpenSize: 170,
+          slideDirection: SlideDirection.TOP_TO_BOTTOM,
+          slider: SliderView(
+            onItemClick: (title) {
+              _key.currentState!.closeSlider();
+            },
+          ),
+          child: _buildContent(context)),
+    );
   }
 }
