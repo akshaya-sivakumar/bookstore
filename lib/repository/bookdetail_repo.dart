@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:bookstore/model/bookdetail_model.dart';
-import 'package:bookstore/ui/dashbaord.dart';
+import '../model/bookdetail_model.dart';
+import '../ui/dashboard.dart';
 
 
 import 'package:http/http.dart' as http;

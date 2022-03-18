@@ -1,4 +1,4 @@
-import 'package:bookstore/ui/dashbaord.dart';
+import 'dashboard.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             height: 40,
             //width: MediaQuery.of(context).size.width * 0.9,
             child: TextField(
@@ -32,13 +32,13 @@ class LoginScreenState extends State<LoginScreen> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                   hintText: 'Enter your name....',
-                  suffixIcon: Icon(Icons.person),
-                  contentPadding: EdgeInsets.only(left: 10)),
+                  suffixIcon: const Icon(Icons.person),
+                  contentPadding: const EdgeInsets.only(left: 10)),
               onChanged: (value) {},
             ),
           ),
           ElevatedButton(
-            child: Text(
+            child: const Text(
               "Let's get started",
               style: TextStyle(color: Colors.white),
             ),
@@ -51,7 +51,7 @@ class LoginScreenState extends State<LoginScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Dashboard()),
+                MaterialPageRoute(builder: (context) => const Dashboard()),
               );
             },
           )

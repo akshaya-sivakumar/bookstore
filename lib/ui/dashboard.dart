@@ -1,10 +1,11 @@
-import 'package:bookstore/bloc/booklist_bloc.dart';
-import 'package:bookstore/bloc/yourbooks_bloc.dart';
-import 'package:bookstore/model/booklist_model.dart';
-import 'package:bookstore/ui/book_detail.dart';
-import 'package:bookstore/ui/widgets/drawer.dart';
+import 'package:flutter/foundation.dart';
+
+import '../bloc/booklist_bloc.dart';
+import '../bloc/yourbooks_bloc.dart';
+import '../model/booklist_model.dart';
+import 'book_detail.dart';
+import 'widgets/appscaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -20,7 +21,7 @@ class DashboardState extends State<Dashboard> {
   static String id = "";
   late BooklistBloc booklistBloc;
   late YourbooksBloc yourbooksBloc;
-  var _controller = TextEditingController();
+  final _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -30,12 +31,14 @@ class DashboardState extends State<Dashboard> {
     yourbooksBloc.getYourbooks();
   }
 
-  var data, yourdata;
+  List<Books> data = [];
+  List<Books> yourdata = [];
+
   Widget _buildContent(BuildContext context) {
     return StreamBuilder<BooklistModel>(
         stream: booklistBloc.booklistStream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) data = snapshot.data?.books;
+          if (snapshot.hasData) data = snapshot.data?.books ?? [];
           return snapshot.connectionState != ConnectionState.waiting
               ? Column(
                   mainAxisSize: MainAxisSize.min,
@@ -44,7 +47,7 @@ class DashboardState extends State<Dashboard> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               left: 12, right: 5, top: 5, bottom: 5),
                           child: Text(
                             "Books for you...",
@@ -60,12 +63,12 @@ class DashboardState extends State<Dashboard> {
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(5),
                       height: 170,
                       child: StreamBuilder<BooklistModel>(
                           stream: yourbooksBloc.yourbooksStream,
                           builder: (context, snapshot) {
-                            yourdata = snapshot.data?.books;
+                            yourdata = snapshot.data?.books ?? [];
                             return snapshot.connectionState !=
                                     ConnectionState.waiting
                                 ? GridView.builder(
@@ -87,7 +90,7 @@ class DashboardState extends State<Dashboard> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      BookDetail()),
+                                                      const BookDetail()),
                                             );
                                           });
                                         },
@@ -160,7 +163,7 @@ class DashboardState extends State<Dashboard> {
                                                           yourdata[index].title,
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               fontSize: 11,
                                                               fontWeight:
                                                                   FontWeight
@@ -199,11 +202,11 @@ class DashboardState extends State<Dashboard> {
                                   );
                           }),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
-                      margin: EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(5),
                       height: 45,
                       //width: MediaQuery.of(context).size.width * 0.9,
                       child: TextField(
@@ -229,9 +232,9 @@ class DashboardState extends State<Dashboard> {
                                       DashboardState.type = "new";
                                       booklistBloc.getBooklist();
                                     },
-                                    icon: Icon(Icons.close))
+                                    icon: const Icon(Icons.close))
                                 : null,
-                            contentPadding: EdgeInsets.only(left: 13)),
+                            contentPadding: const EdgeInsets.only(left: 13)),
                         onChanged: (value) {
                           DashboardState.type = value;
                           booklistBloc.getBooklist();
@@ -241,7 +244,7 @@ class DashboardState extends State<Dashboard> {
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: data?.length,
+                        itemCount: data.length,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
@@ -252,45 +255,45 @@ class DashboardState extends State<Dashboard> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => BookDetail()),
+                                          builder: (context) =>
+                                              const BookDetail()),
                                     );
                                   });
                                 },
                                 child: Card(
-                                    child: Container(
-                                        child: Row(
+                                    child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Image.network(
-                                      data![index].image,
+                                      data[index].image,
                                       height: 90,
                                     ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
                                                 0.5,
                                             child: Text(
                                               data[index].title,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             )),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 5,
                                         ),
-                                        Container(
+                                        SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
                                                 0.5,
                                             child: Text(
                                               data[index].subtitle,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 13,
                                                   color: Colors.grey),
                                             ))
@@ -306,11 +309,13 @@ class DashboardState extends State<Dashboard> {
                                                 Radius.circular(6))),
                                       ),
                                       onPressed: () {
-                                        print('Pressed');
+                                        if (kDebugMode) {
+                                          print('Pressed');
+                                        }
                                       },
                                     )
                                   ],
-                                ))),
+                                )),
                               ),
                             ],
                           );
@@ -328,40 +333,10 @@ class DashboardState extends State<Dashboard> {
         });
   }
 
-  GlobalKey<SliderDrawerState> _key = GlobalKey<SliderDrawerState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /*  appBar: AppBar(
-          automaticallyImplyLeading: false,
-          actions: [Icon(Icons.notification_add)],
-          title: Text("BookStore"),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
-                  colors: <Color>[HexColor("#F67B50"), HexColor("#FBAA60")]),
-            ),
-          ),
-        ), */
-      // backgroundColor: Theme.of(context).primaryColor,
-      body: SliderDrawer(
-          appBar: SliderAppBar(
-              appBarPadding: EdgeInsets.only(top: 15),
-              title: Text("BookStore",
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.w700))),
-          key: _key,
-          sliderOpenSize: 200,
-          slideDirection: SlideDirection.TOP_TO_BOTTOM,
-          slider: SliderView(
-            onItemClick: (title) {
-              _key.currentState!.closeSlider();
-            },
-          ),
-          child:
-              Container(color: Colors.white70, child: _buildContent(context))),
+    return AppScaffold(
+      _buildContent(context),
     );
   }
 }
