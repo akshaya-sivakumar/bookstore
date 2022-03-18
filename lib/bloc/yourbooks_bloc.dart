@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bookstore/model/booklist_model.dart';
+import '../model/booklist_model.dart';
 
-import 'package:bookstore/repository/yourbooks_repo.dart';
+import '../repository/yourbooks_repo.dart';
 import 'package:flutter/cupertino.dart';
 
 

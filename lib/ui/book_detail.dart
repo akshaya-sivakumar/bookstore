@@ -1,6 +1,8 @@
-import 'package:bookstore/bloc/bookdetail_bloc.dart';
-import 'package:bookstore/model/bookdetail_model.dart';
-import 'package:bookstore/ui/web_view.dart';
+import 'package:flutter/foundation.dart';
+
+import '../bloc/bookdetail_bloc.dart';
+import '../model/bookdetail_model.dart';
+import 'web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,241 +27,14 @@ class BookDetailState extends State<BookDetail> {
     bookdetailBloc.getBookdetail();
   }
 
-  var datas;
+  BookdetailModel? datas;
   Widget _buildContent(BuildContext context) {
     return StreamBuilder<BookdetailModel>(
         stream: bookdetailBloc.bookdetailStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) datas = snapshot.data;
           return snapshot.connectionState != ConnectionState.waiting
-              ? Container(
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.all(5),
-                  alignment: Alignment.topLeft,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              datas.title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  color: Colors.black87),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            width: MediaQuery.of(context).size.width * 0.35,
-                            child: RatingBar.builder(
-                              initialRating: double.parse(datas.rating),
-                              minRating: 1,
-                              itemSize: 22,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemPadding:
-                                  EdgeInsets.symmetric(horizontal: 0.0),
-                              itemBuilder: (context, _) => Icon(
-                                Icons.star,
-                                size: 10,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              datas.subtitle,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.grey),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Stack(
-                        overflow: Overflow.clip,
-                        children: [
-                          Image.network(
-                            datas.image,
-                            width: 350,
-                            height: 350,
-                          ),
-                          Positioned(
-                            top: 12,
-                            left: 28,
-                            child: Container(
-                              child: Image.asset(
-                                "assets/images/stock.png",
-                                color: Colors.green,
-                                colorBlendMode: BlendMode.dst,
-                              ),
-                            ),
-                            width: 120,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Price :  ",
-                                style: GoogleFonts.lato(
-                                    fontSize: 15,
-                                    color: Colors.orangeAccent[400]),
-                              ),
-                              Text(
-                                datas.price,
-                                style: GoogleFonts.lato(
-                                    fontWeight: FontWeight.bold, fontSize: 23),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(50)),
-                                padding: EdgeInsets.all(5),
-                                child: LikeButton(likeBuilder: (isLiked) {
-                                  if (isLiked == true)
-                                    Fluttertoast.showToast(
-                                        msg: "Added to wishlist",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.pink,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                }),
-                              ),
-                              Text(
-                                "Add to wishlist ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "M.R.P  : ",
-                            style: GoogleFonts.lato(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                                color: Colors.grey),
-                          ),
-                          Text(
-                            "20.97",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.grey,
-                                decoration: TextDecoration.lineThrough),
-                          )
-                        ],
-                      ),
-                      rowButtons(context, "Length  ", datas.pages + " Pages",
-                          "Language ", datas.language),
-                      ColumnButtons(
-                        context,
-                        "Author         ",
-                        datas.authors,
-                        "Publisher   ",
-                        datas.publisher,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Description ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "       " + datas.desc,
-                              style: GoogleFonts.lato(),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Published At : ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              datas.year,
-                              style: GoogleFonts.lato(),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2.0),
-                              child: Text(
-                                "Download PDF : ",
-                                style: GoogleFonts.lato(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                await launch(
-                                    "https://itbook.store/books/${datas.isbn13}");
-                              },
-                              child: Text(
-                                "Click here",
-                                style: GoogleFonts.lato(
-                                    color: HexColor("#F54D3D"), fontSize: 17),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ))
+              ?  onGridBooks(context)
               : Container(
                   height: MediaQuery.of(context).size.height,
                   alignment: FractionalOffset.center,
@@ -270,24 +45,258 @@ class BookDetailState extends State<BookDetail> {
         });
   }
 
+ Widget onGridBooks(BuildContext context)  {
+    return Container(
+                margin: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
+                alignment: Alignment.topLeft,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            datas?.title ?? "",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: Colors.black87),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          child: RatingBar.builder(
+                            initialRating: double.parse(datas?.rating ?? "0"),
+                            minRating: 1,
+                            itemSize: 22,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 0.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              size: 10,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {},
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            datas?.subtitle ?? "",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      clipBehavior: Clip.hardEdge,
+                      children: [
+                        if (datas != null)
+                          Image.network(
+                            datas!.image,
+                            width: 350,
+                            height: 350,
+                          ),
+                        Positioned(
+                          top: 12,
+                          left: 28,
+                          child: Image.asset(
+                            "assets/images/stock.png",
+                            color: Colors.green,
+                            colorBlendMode: BlendMode.dst,
+                          ),
+                          width: 120,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Price :  ",
+                              style: GoogleFonts.lato(
+                                  fontSize: 15,
+                                  color: Colors.orangeAccent[400]),
+                            ),
+                            Text(
+                              datas?.price ?? "",
+                              style: GoogleFonts.lato(
+                                  fontWeight: FontWeight.bold, fontSize: 23),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(50)),
+                              padding: const EdgeInsets.all(5),
+                              child: LikeButton(likeBuilder: (isLiked) {
+                                if (isLiked == true) {
+                                  Fluttertoast.showToast(
+                                      msg: "Added to wishlist",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.pink,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                }
+                                return null;
+                              }),
+                            ),
+                            const Text(
+                              "Add to wishlist ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "M.R.P  : ",
+                          style: GoogleFonts.lato(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: Colors.grey),
+                        ),
+                        const Text(
+                          "20.97",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough),
+                        )
+                      ],
+                    ),
+                    rowButtons(
+                        context,
+                        "Length  ",
+                        (datas?.pages ?? "") + " Pages",
+                        "Language ",
+                        datas?.language),
+                    columnButtons(
+                      context,
+                      "Author         ",
+                      datas?.authors ?? "",
+                      "Publisher   ",
+                      datas?.publisher ?? "",
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Description ",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "       " + (datas?.desc ?? ""),
+                            style: GoogleFonts.lato(),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Published At : ",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            datas?.year ?? "",
+                            style: GoogleFonts.lato(),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: Text(
+                              "Download PDF : ",
+                              style: GoogleFonts.lato(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              await launch(
+                                  "https://itbook.store/books/${datas?.isbn13}");
+                            },
+                            child: Text(
+                              "Click here",
+                              style: GoogleFonts.lato(
+                                  color: HexColor("#F54D3D"), fontSize: 17),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ));
+  }
+
   Row rowButtons(
       BuildContext context, String title1, subtitle1, title2, subtitle2) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Container(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           width: MediaQuery.of(context).size.width * 0.43,
           child: ElevatedButton(
             child: Row(
               children: [
                 Text(
                   title1,
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
                 Text(
                   subtitle1,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black87, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -299,7 +308,9 @@ class BookDetailState extends State<BookDetail> {
                   borderRadius: BorderRadius.all(Radius.circular(6))),
             ),
             onPressed: () {
-              print('Pressed');
+              if (kDebugMode) {
+                print('Pressed');
+              }
             },
           ),
         ),
@@ -308,11 +319,11 @@ class BookDetailState extends State<BookDetail> {
             children: [
               Text(
                 title2,
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
               Text(
                 subtitle2,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.black87, fontWeight: FontWeight.bold),
               ),
             ],
@@ -324,17 +335,19 @@ class BookDetailState extends State<BookDetail> {
                 borderRadius: BorderRadius.all(Radius.circular(6))),
           ),
           onPressed: () {
-            print('Pressed');
+            if (kDebugMode) {
+              print('Pressed');
+            }
           },
         )
       ],
     );
   }
 
-  Widget ColumnButtons(
+  Widget columnButtons(
       BuildContext context, String title1, subtitle1, title2, subtitle2) {
     return Container(
-      margin: EdgeInsets.all(5),
+      margin: const EdgeInsets.all(5),
       child: Card(
         shape: RoundedRectangleBorder(
           side: BorderSide(color: HexColor("#FBAA60"), width: 1),
@@ -345,8 +358,8 @@ class BookDetailState extends State<BookDetail> {
             borderRadius: BorderRadius.circular(10),
             color: HexColor("#FFE5B4"),
           ),
-          margin: EdgeInsets.all(5),
-          padding: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               Row(
@@ -364,7 +377,7 @@ class BookDetailState extends State<BookDetail> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Row(
@@ -373,12 +386,12 @@ class BookDetailState extends State<BookDetail> {
                     title2,
                     style: TextStyle(color: HexColor("#A82810")),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 3,
                   ),
                   Text(
                     subtitle2,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black87, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -395,7 +408,7 @@ class BookDetailState extends State<BookDetail> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
-          title: Text("BookStore"),
+          title: const Text("BookStore"),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -406,17 +419,17 @@ class BookDetailState extends State<BookDetail> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
-          child: Container(
+          child: SizedBox(
             height: 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: ElevatedButton.icon(
-                    icon: Icon(Icons.arrow_downward),
-                    label: Text(
+                    icon: const Icon(Icons.arrow_downward),
+                    label: const Text(
                       "More Info",
                       style: TextStyle(color: Colors.white),
                     ),
@@ -432,16 +445,16 @@ class BookDetailState extends State<BookDetail> {
                         MaterialPageRoute(
                             builder: (context) => WebViewContainer(
                                 WebViewContainerArguments(
-                                    datas.url, datas.title))),
+                                    datas!.url, datas!.title))),
                       );
                     },
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: ElevatedButton.icon(
-                    icon: Icon(Icons.shopping_cart),
-                    label: Text(
+                    icon: const Icon(Icons.shopping_cart),
+                    label: const Text(
                       "Buy now",
                       style: TextStyle(color: Colors.white),
                     ),
@@ -457,8 +470,8 @@ class BookDetailState extends State<BookDetail> {
                         MaterialPageRoute(
                             builder: (context) => WebViewContainer(
                                 WebViewContainerArguments(
-                                    "https://www.amazon.com/dp/${datas.isbn10}/?tag=isbndir-20",
-                                    datas.title))),
+                                    "https://www.amazon.com/dp/${datas!.isbn10}/?tag=isbndir-20",
+                                    datas!.title))),
                       );
                     },
                   ),
@@ -467,7 +480,6 @@ class BookDetailState extends State<BookDetail> {
             ),
           ),
         ),
-        body: Container(
-            child: SingleChildScrollView(child: _buildContent(context))));
+        body: SingleChildScrollView(child: _buildContent(context)));
   }
 }

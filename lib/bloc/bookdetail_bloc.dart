@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bookstore/model/bookdetail_model.dart';
-import 'package:bookstore/repository/bookdetail_repo.dart';
+import '../model/bookdetail_model.dart';
+import '../repository/bookdetail_repo.dart';
 import 'package:flutter/cupertino.dart';
 
 
